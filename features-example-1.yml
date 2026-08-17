@@ -1,0 +1,79 @@
+# API Commons — Features, illustrative example
+#
+# The features of a made-up messaging API on example.com. Note `operations` on each
+# entry: that is the field that lets you check a marketing claim against the OpenAPI,
+# and the last two entries deliberately show what it looks like when you can't.
+
+- name: Send a message
+  description: Send a message to one recipient over SMS, email, or push.
+  url: https://example.com/features/send
+  category: Messaging
+  status: ga
+  operations:
+    - sendMessage
+    - getMessage
+
+- name: Bulk send
+  description: Send the same message to up to 10,000 recipients in one request.
+  url: https://example.com/features/bulk
+  category: Messaging
+  status: ga
+  tiers:
+    - Pro
+    - Enterprise
+  operations:
+    - createBulkSend
+    - getBulkSend
+    - cancelBulkSend
+
+- name: Delivery webhooks
+  description: Receive a callback when a message is delivered, bounced, or read.
+  url: https://example.com/features/webhooks
+  category: Events
+  status: ga
+  operations:
+    - createWebhook
+    - listWebhooks
+    - deleteWebhook
+
+- name: Scheduled send
+  description: Queue a message for delivery at a future time, in the recipient's timezone.
+  url: https://example.com/features/scheduling
+  category: Messaging
+  status: beta
+  tiers:
+    - Pro
+    - Enterprise
+  operations:
+    - scheduleMessage
+    - cancelScheduledMessage
+
+- name: Message templates
+  description: Reusable message bodies with named variables.
+  url: https://example.com/features/templates
+  category: Content
+  status: ga
+  operations:
+    - createTemplate
+    - listTemplates
+    - updateTemplate
+    - deleteTemplate
+
+- name: Analytics dashboard
+  description: Delivery and engagement reporting.
+  url: https://example.com/features/analytics
+  category: Reporting
+  status: ga
+  note: >-
+    No `operations`. This is a console feature with no API behind it — a real and common
+    case, and worth recording as such rather than leaving the reader to assume an
+    endpoint exists.
+
+- name: AI message optimization
+  description: Automatically rewrite message copy for engagement.
+  url: https://example.com/features/ai
+  category: Content
+  status: announced
+  note: >-
+    Announced, not shipped. Recording it as `announced` rather than omitting it is the
+    honest option — it is on the marketing page, so a consumer will ask about it.

@@ -1,0 +1,132 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+$id: https://raw.githubusercontent.com/api-commons/features/main/features-json-schema.yml
+title: API Commons Features
+description: >-
+  A machine-readable list of what an API can actually do — the consumer-facing capability
+  list that sits between the marketing page and the reference documentation. This is the
+  schema behind the Features property in API Commons.
+
+  A features list is normally a marketing artifact, which is exactly why it is worth
+  making machine-readable: it is the only place a provider states its capabilities in the
+  consumer's language, and the gap between what it claims and what the OpenAPI actually
+  exposes is a measurable thing. The `operations` field is what makes that check possible.
+
+oneOf:
+  - title: Features document
+    description: A bare list of features — a standalone features file.
+    type: array
+    minItems: 1
+    items:
+      $ref: '#/$defs/feature'
+  - title: Features properties
+    description: >-
+      One or more Features properties as they appear inside an apis.yml / apis.json
+      index, each carrying its features under `data`.
+    type: array
+    minItems: 1
+    items:
+      $ref: '#/$defs/featuresProperty'
+
+$defs:
+
+  featuresProperty:
+    type: object
+    additionalProperties: false
+    required:
+      - type
+      - data
+    properties:
+      name:
+        type: string
+        description: The name of the property as it appears in the index.
+      type:
+        const: Features
+        description: The API Commons property type. Always Features.
+      description:
+        type: string
+        description: What this list covers.
+      url:
+        type: string
+        format: uri
+        description: The provider page this was read from.
+      source_date:
+        type: string
+        format: date
+        description: The date this was last verified against that page.
+      data:
+        type: array
+        minItems: 1
+        description: The features themselves.
+        items:
+          $ref: '#/$defs/feature'
+
+  feature:
+    type: object
+    additionalProperties: false
+    required:
+      - name
+    properties:
+
+      name:
+        type: string
+        minLength: 1
+        description: >-
+          The feature, in the consumer's words — the name it is marketed and searched
+          under, not the internal name.
+
+      description:
+        type: string
+        description: What the feature does, in a sentence.
+
+      url:
+        type: string
+        format: uri
+        description: The page describing this feature.
+
+      category:
+        type: string
+        description: >-
+          A grouping for the feature. Where possible use the same vocabulary as the
+          OpenAPI tags, so the features list and the reference line up.
+
+      status:
+        description: >-
+          How much a consumer can rely on it. `announced` means it has been talked about
+          but is not shippable, which is worth recording separately from `preview`.
+        enum:
+          - announced
+          - preview
+          - beta
+          - ga
+          - deprecated
+          - retired
+
+      tiers:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        description: >-
+          The plans or tiers this feature is available on. Omit when it is available to
+          everyone. Names should match the Plans property where one exists.
+        items:
+          type: string
+
+      operations:
+        type: array
+        minItems: 1
+        uniqueItems: true
+        description: >-
+          The OpenAPI operationIds that implement this feature. This is the field that
+          earns the schema its keep — it turns a marketing claim into something checkable
+          against the description, and makes "advertised but not in the API" a query
+          rather than an argument.
+        items:
+          type: string
+
+      requires_auth:
+        type: boolean
+        description: Whether the feature is reachable without authentication.
+
+      note:
+        type: string
+        description: Anything a consumer should know before depending on it.

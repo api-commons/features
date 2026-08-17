@@ -1,0 +1,51 @@
+# API Commons — Features as an apis.yml property, illustrative example
+#
+# The envelope form, split into two properties so the platform features and the API
+# features are not conflated. That split matters: a features page usually mixes both,
+# and only one of them has operationIds behind it.
+
+- name: Features
+  type: Features
+  description: What the Example messaging platform can do.
+  url: https://example.com/features
+  source_date: '2026-08-17'
+  data:
+    - name: Send a message
+      description: Send a message to one recipient over SMS, email, or push.
+      category: Messaging
+      status: ga
+      operations:
+        - sendMessage
+    - name: Bulk send
+      description: Send the same message to up to 10,000 recipients in one request.
+      category: Messaging
+      status: ga
+      tiers:
+        - Pro
+        - Enterprise
+      operations:
+        - createBulkSend
+    - name: Delivery webhooks
+      description: Receive a callback when a message is delivered, bounced, or read.
+      category: Events
+      status: ga
+      operations:
+        - createWebhook
+
+- name: Console Features
+  type: Features
+  description: >-
+    Features of the web console that have no API behind them. Kept as a separate
+    property so that a coverage check against the OpenAPI does not count them as gaps.
+  url: https://example.com/console
+  source_date: '2026-08-17'
+  data:
+    - name: Analytics dashboard
+      description: Delivery and engagement reporting.
+      category: Reporting
+      status: ga
+    - name: Team management
+      description: Invite users and assign roles.
+      category: Administration
+      status: ga
+      requires_auth: true
